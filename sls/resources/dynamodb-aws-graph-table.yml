@@ -1,0 +1,18 @@
+Resources:
+  AwsGraphTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: '${self:provider.environment.AWS_GRAPH_TABLE}'
+      SSESpecification:
+        SSEEnabled: true
+      AttributeDefinitions:
+        - AttributeName: Id
+          AttributeType: S
+        - AttributeName: order
+          AttributeType: N
+      KeySchema:
+        - AttributeName: Id
+          KeyType: HASH
+        - AttributeName: order
+          KeyType: RANGE
+      BillingMode: PAY_PER_REQUEST

@@ -1,0 +1,12 @@
+{
+	"requestContext": {
+		"authorizer": {
+			"claims": {
+				"cognito:username": "user1"
+			}
+		},
+		"identity": {
+			"cognitoIdentityId": "USER-SUB-1234"
+		}
+	}
+}

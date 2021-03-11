@@ -1,0 +1,8 @@
+/.idea
+/.serverless
+/.webpack
+/node_modules
+/package-lock.json
+/*.sh
+
+

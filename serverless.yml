@@ -1,0 +1,74 @@
+service: graph
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  region: eu-west-1
+  profile: ${opt:profile, 'default'}
+  stage: ${opt:stage, 'dev'}
+  deploymentBucket:
+    name: graph-${self:provider.stage}-deployment
+    serverSideEncryption: AES256
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+  apiGateway:
+    shouldStartNameWithService: true
+  environment:
+    API_VERSION: v1
+    STAGE: ${self:provider.stage}
+    AWS_GRAPH_TABLE: 'graph-items'
+
+plugins:
+  - serverless-deployment-bucket
+  - serverless-offline
+  - serverless-webpack
+
+#package:
+#  individually: false
+#  excludeDevDependencies: false
+#  include:
+#    - backend/**/!(*.test).js
+#  exclude:
+#    - backend/**/*.ts
+
+functions:
+  list:
+    handler: src/controllers/graph/handler.list
+    description: Returns graph items list
+    events:
+      - http:
+          path: ${self:provider.environment.API_VERSION}/graph
+          method: get
+          cors: true
+  create:
+    handler: src/controllers/graph/handler.create
+    description: Creates graph item
+    events:
+      - http:
+          path: ${self:provider.environment.API_VERSION}/graph
+          method: post
+          cors: true
+  remove:
+    handler: src/controllers/graph/handler.remove
+    description: Removes graph item
+    events:
+      - http:
+          path: ${self:provider.environment.API_VERSION}/graph/{id}
+          method: delete
+          cors: true
+
+custom:
+  deploymentBucket:
+    versioning: true
+    accelerate: true
+    blockPublicAccess: true
+    tags:
+      - Key: Environment
+        Value: ${self:provider.stage}
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    includeModules: true
+  logRetentionInDays: 1
+
+resources:
+  - ${file(sls/resources/dynamodb-aws-graph-table.yml)}
