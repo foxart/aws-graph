@@ -1,7 +1,6 @@
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const slsw = require('serverless-webpack');
-
 module.exports = {
 	entry: slsw.lib.entries,
 	mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
@@ -19,8 +18,19 @@ module.exports = {
 	plugins: [],
 	module: {
 		rules: [
-			{test: /\.ts(x?)$/, use: [{loader: 'ts-loader',}]},
-			{test: /\.(txt|htm|html)$/,  use: 'raw-loader', exclude: /node_modules\//},
+			{
+				test: /\.ts(x?)$/,
+				use: [{
+					loader: 'ts-loader',
+				}],
+				// include: __dirname,
+				// exclude: /node_modules/
+			},
+			{
+				test: /\.(txt|htm|html)$/,
+				use: 'raw-loader',
+				exclude: /node_modules/
+			},
 		],
 	},
 	output: {

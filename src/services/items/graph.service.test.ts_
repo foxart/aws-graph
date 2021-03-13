@@ -1,6 +1,6 @@
 import * as sinon from 'sinon';
 import * as AWS from 'aws-sdk';
-import { GraphService } from './graph.service';
+import { ItemsService } from './graph.service';
 import { IGraphRequest, IGraphResponse } from '../graph';
 
 describe('service/user-subscription', () => {
@@ -53,7 +53,7 @@ describe('service/user-subscription', () => {
 			scanDb.returns({ promise: () => Promise.resolve({ Items: [scanData1] }) } as any);
 			queryDb.returns({ promise: () => Promise.resolve({ Items: [queryData] }) } as any);
 			// @ts-ignore
-			const response = await GraphService.list(queryData.userId);
+			const response = await ItemsService.list(queryData.userId);
 			expect(queryDb.getCall(0).args).toEqual([{
 				TableName: undefined,
 				ExpressionAttributeNames: {
@@ -76,7 +76,7 @@ describe('service/user-subscription', () => {
 		it('Should return empty list', async () => {
 			queryDb.returns({ promise: () => Promise.resolve({ Items: undefined }) } as any);
 			// @ts-ignore
-			const response = await GraphService.list(queryData.userId);
+			const response = await ItemsService.list(queryData.userId);
 			expect(queryDb.getCall(0).args).toEqual([{
 				TableName: undefined,
 				ExpressionAttributeNames: {
@@ -98,7 +98,7 @@ describe('service/user-subscription', () => {
 			scanDb.returns({ promise: () => Promise.resolve({ Items: [scanData1] }) } as any);
 			putDb.returns({ promise: () => Promise.resolve({}) } as any);
 			// @ts-ignore
-			const response = await GraphService.create(queryData.userId, requestData);
+			const response = await ItemsService.create(queryData.userId, requestData);
 			const result = putDb.getCall(0).args[0];
 			expect([result]).toEqual([{
 				TableName: undefined,
@@ -123,7 +123,7 @@ describe('service/user-subscription', () => {
 			putDb.returns({ promise: () => Promise.resolve({}) } as any);
 			try {
 				// @ts-ignore
-				await GraphService.create(queryData.userId, requestData);
+				await ItemsService.create(queryData.userId, requestData);
 			} catch (e) {
 				expect(e).toEqual(new Error('already subscribed'));
 			}
@@ -137,7 +137,7 @@ describe('service/user-subscription', () => {
 			scanDb.returns({ promise: () => Promise.resolve({ Items: [scanData1] }) } as any);
 			deleteDb.returns({ promise: () => Promise.resolve({}) } as any);
 			// @ts-ignore
-			const response = await GraphService.remove(queryData.userId);
+			const response = await ItemsService.remove(queryData.userId);
 			const result = deleteDb.getCall(0).args[0];
 			expect([result]).toEqual([{
 				TableName: undefined,
@@ -157,7 +157,7 @@ describe('service/user-subscription', () => {
 			deleteDb.returns({ promise: () => Promise.resolve({}) } as any);
 			try {
 				// @ts-ignore
-				await GraphService.remove(queryData.userId);
+				await ItemsService.remove(queryData.userId);
 			} catch (e) {
 				expect(e).toEqual(new Error('not subscribed'));
 			}

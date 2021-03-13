@@ -1,8 +1,8 @@
 Resources:
-  AwsGraphTable:
+  GraphItemsTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: '${self:provider.environment.AWS_GRAPH_TABLE}'
+      TableName: '${self:provider.environment.DYNAMO_GRAPH_ITEMS_TABLE}'
       SSESpecification:
         SSEEnabled: true
       AttributeDefinitions:

@@ -1,9 +1,18 @@
 {
 	"extends": "tslint-config-airbnb",
 	"rules": {
-		"variable-name": [
-			false,
-			"allow-leading-underscore"
+		"align": [
+			true,
+			"parameters",
+			"statements"
+		],
+		"import-name": [
+			false
+		],
+		"indent": [
+			true,
+			"tabs",
+			2
 		],
 		"max-line-length": [
 			true,
@@ -11,11 +20,12 @@
 				"limit": 150
 			}
 		],
-		"indent": [
-			true,
-			"tabs",
-			2
-		],
+		"newline-before-return": false,
+		"no-unused-variable": false,
+		"no-increment-decrement": false,
+		"no-trailing-whitespace": false,
+		"no-consecutive-blank-lines": true,
+		"semicolon": [true, "always", "ignore-bound-class-methods"],
 		"ter-indent": [
 			true,
 			"tab",
@@ -23,18 +33,9 @@
 				"SwitchCase": 1
 			}
 		],
-		"align": [
-			true,
-			"parameters",
-			"statements"
-		],
-		"semicolon": [true, "always", "ignore-bound-class-methods"],
-		"no-unused-variable": false,
-		"no-increment-decrement": false,
-		"no-trailing-whitespace": false,
-		"no-consecutive-blank-lines": true,
-		"import-name": [
-			false
+		"variable-name": [
+			false,
+			"allow-leading-underscore"
 		]
 	}
 }

@@ -16,7 +16,21 @@ provider:
   environment:
     API_VERSION: v1
     STAGE: ${self:provider.stage}
-    AWS_GRAPH_TABLE: 'graph-items'
+    DYNAMO_GRAPH_ITEMS_TABLE: 'graph-items'
+  iamRoleStatements:
+    - Effect: "Allow" # xray permissions (required)
+      Action:
+#        - lambda:InvokeFunction
+#        - lambda:RemovePermission
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+#        - dynamodb:BatchWriteItem
+      Resource:
+        - "*"
 
 plugins:
   - serverless-deployment-bucket
@@ -33,7 +47,7 @@ plugins:
 
 functions:
   list:
-    handler: src/controllers/graph/handler.list
+    handler: src/controllers/items/handler.list
     description: Returns graph items list
     events:
       - http:
@@ -41,15 +55,15 @@ functions:
           method: get
           cors: true
   create:
-    handler: src/controllers/graph/handler.create
+    handler: src/controllers/items/handler.create
     description: Creates graph item
     events:
       - http:
           path: ${self:provider.environment.API_VERSION}/graph
           method: post
           cors: true
-  remove:
-    handler: src/controllers/graph/handler.remove
+  delete:
+    handler: src/controllers/items/handler.delete
     description: Removes graph item
     events:
       - http:
@@ -67,8 +81,10 @@ custom:
         Value: ${self:provider.stage}
   webpack:
     webpackConfig: 'webpack.config.js'
-    includeModules: true
+    includeModules:
+      forceExclude:
+        - pretty-error
   logRetentionInDays: 1
 
 resources:
-  - ${file(sls/resources/dynamodb-aws-graph-table.yml)}
+  - ${file(sls/resources/dynamo-graph-items-table.yml)}

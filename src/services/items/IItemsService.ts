@@ -1,12 +1,14 @@
-export interface IGraphRequest {
+interface IItemsRequest {
 	subject: string;
 	text: string;
 }
 
-export interface IGraphResponse {
+interface IItemsResponse {
 	Id: string;
 	order: number;
 	datetime: Date;
 	subject: string;
 	text: string;
 }
+
+export { IItemsRequest, IItemsResponse };
