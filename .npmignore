@@ -1,6 +1,5 @@
-/.coverage
 /.idea
-/.serverless
-/.webpack
 /node_modules
+/clean.sh
+/graphql.schema
 /package-lock.json
